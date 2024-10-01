@@ -7,4 +7,8 @@ export async function categoryRoutes(fastify: FastifyInstance) {
   fastify.post("/categories", (request, reply) =>
     categoryController.create(request, reply)
   );
+
+  fastify.delete("/categories/:id", (request, reply) =>
+    categoryController.delete(request, reply)
+  );
 }

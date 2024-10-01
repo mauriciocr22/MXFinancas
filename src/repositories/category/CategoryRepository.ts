@@ -21,4 +21,22 @@ export class CategoryRepository implements ICategoryRepository {
 
     return category;
   }
+
+  async deleteCategory(id: string): Promise<Category> {
+    try {
+      const deletedCategory = await prisma.category.delete({
+        where: { id },
+      });
+
+      return deletedCategory;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(
+          `Category with ID ${id} could not be deleted. ${error.message}`
+        );
+      } else {
+        throw new Error(`Category with ID ${id} could not be deleted.`);
+      }
+    }
+  }
 }
