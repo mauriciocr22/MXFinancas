@@ -16,18 +16,17 @@ datasource db {
 model Transaction {
   id          String          @id @default(uuid())
   value       Int
-  category    String
+  category    Category        @relation(fields: [categoryId], references: [id])
+  categoryId  String
   type        TransactionType
   description String
-  Category    Category[]
 }
 
 model Category {
-  id            String          @id @default(uuid())
-  description   String
-  type          TransactionType
-  transaction   Transaction     @relation(fields: [transactionId], references: [id])
-  transactionId String
+  id           String          @id @default(uuid())
+  description  String
+  type         TransactionType
+  transactions Transaction[]
 }
 
 enum TransactionType {
