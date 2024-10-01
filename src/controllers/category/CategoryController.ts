@@ -3,15 +3,18 @@ import { CategoryRepository } from "../../repositories/category/CategoryReposito
 import { CreateCategoryUseCase } from "../../useCases/categories/CreateCategoryUseCase";
 import { TransactionType } from "@prisma/client";
 import { DeleteCategoryUseCase } from "../../useCases/categories/DeleteCategoryUseCase";
+import { UpdateCategoryUseCase } from "../../useCases/categories/UpdateCategoryUseCase";
 
 export class CategoryController {
   private createCategoryUseCase: CreateCategoryUseCase;
   private deleteCategoryUseCase: DeleteCategoryUseCase;
+  private updateCategoryUseCase: UpdateCategoryUseCase;
 
   constructor() {
     const categoryRepository = new CategoryRepository();
     this.createCategoryUseCase = new CreateCategoryUseCase(categoryRepository);
     this.deleteCategoryUseCase = new DeleteCategoryUseCase(categoryRepository);
+    this.updateCategoryUseCase = new UpdateCategoryUseCase(categoryRepository);
   }
 
   async create(request: FastifyRequest, reply: FastifyReply) {
@@ -50,6 +53,29 @@ export class CategoryController {
         .send(
           `Deleted the category with '${deletedCategory.description}' description successfully.`
         );
+    } catch (error) {
+      reply.status(400).send({
+        error:
+          error instanceof Error ? error.message : "Unknown error occurred",
+      });
+    }
+  }
+
+  async update(request: FastifyRequest, reply: FastifyReply) {
+    try {
+      const { id } = request.params as { id: string };
+      const { description, type } = request.body as {
+        description: string;
+        type: TransactionType;
+      };
+
+      const updatedCategory = await this.updateCategoryUseCase.execute({
+        id,
+        description,
+        type,
+      });
+
+      reply.status(200).send(updatedCategory);
     } catch (error) {
       reply.status(400).send({
         error:

@@ -11,4 +11,8 @@ export async function categoryRoutes(fastify: FastifyInstance) {
   fastify.delete("/categories/:id", (request, reply) =>
     categoryController.delete(request, reply)
   );
+
+  fastify.put("/categories/:id", (request, reply) =>
+    categoryController.update(request, reply)
+  );
 }
