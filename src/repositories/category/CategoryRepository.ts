@@ -16,8 +16,12 @@ export class CategoryRepository implements ICategoryRepository {
     });
   }
 
-  async deleteCategory(id: string): Promise<Category> {
-    return prisma.category.delete({
+  async getAllCategories(): Promise<Category[]> {
+    return prisma.category.findMany();
+  }
+
+  async getCategoryById(id: string): Promise<Category | null> {
+    return prisma.category.findUnique({
       where: { id },
     });
   }
@@ -36,8 +40,8 @@ export class CategoryRepository implements ICategoryRepository {
     });
   }
 
-  async getCategoryById(id: string): Promise<Category | null> {
-    return prisma.category.findUnique({
+  async deleteCategory(id: string): Promise<Category> {
+    return prisma.category.delete({
       where: { id },
     });
   }

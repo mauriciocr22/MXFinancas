@@ -5,12 +5,14 @@ import { TransactionType } from "@prisma/client";
 import { DeleteCategoryUseCase } from "../../useCases/categories/DeleteCategoryUseCase";
 import { UpdateCategoryUseCase } from "../../useCases/categories/UpdateCategoryUseCase";
 import { GetCategoryByIdUseCase } from "../../useCases/categories/GetCategoryByIdUseCase";
+import { GetAllCategoriesUseCase } from "../../useCases/categories/GetAllCategoriesUseCase";
 
 export class CategoryController {
   private createCategoryUseCase: CreateCategoryUseCase;
   private deleteCategoryUseCase: DeleteCategoryUseCase;
   private updateCategoryUseCase: UpdateCategoryUseCase;
   private getCategoryByIdUseCase: GetCategoryByIdUseCase;
+  private getAllCategoriesUseCase: GetAllCategoriesUseCase;
 
   constructor() {
     const categoryRepository = new CategoryRepository();
@@ -18,6 +20,9 @@ export class CategoryController {
     this.deleteCategoryUseCase = new DeleteCategoryUseCase(categoryRepository);
     this.updateCategoryUseCase = new UpdateCategoryUseCase(categoryRepository);
     this.getCategoryByIdUseCase = new GetCategoryByIdUseCase(
+      categoryRepository
+    );
+    this.getAllCategoriesUseCase = new GetAllCategoriesUseCase(
       categoryRepository
     );
   }
@@ -44,12 +49,24 @@ export class CategoryController {
     }
   }
 
+  async getAll(request: FastifyRequest, reply: FastifyReply) {
+    try {
+      const categories = await this.getAllCategoriesUseCase.execute();
+      reply.status(200).send(categories);
+    } catch (error) {
+      reply.status(400).send({
+        error:
+          error instanceof Error ? error.message : "Unknown error occurred",
+      });
+    }
+  }
+
   async getById(request: FastifyRequest, reply: FastifyReply) {
     try {
       const { id } = request.params as { id: string };
 
       const category = await this.getCategoryByIdUseCase.execute({ id });
-      reply.status(201).send(category);
+      reply.status(200).send(category);
     } catch (error) {
       reply.status(400).send({
         error:

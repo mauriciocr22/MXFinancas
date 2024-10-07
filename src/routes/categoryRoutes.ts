@@ -8,6 +8,10 @@ export async function categoryRoutes(fastify: FastifyInstance) {
     categoryController.create(request, reply)
   );
 
+  fastify.get("/categories", (request, reply) =>
+    categoryController.getAll(request, reply)
+  );
+
   fastify.get("/categories/:id", (request, reply) =>
     categoryController.getById(request, reply)
   );
