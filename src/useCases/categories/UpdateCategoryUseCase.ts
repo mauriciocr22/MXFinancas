@@ -15,8 +15,8 @@ export class UpdateCategoryUseCase {
   }
 
   async execute({ id, description, type }: UpdateCategoryDTO) {
-    if (!description || !type) {
-      throw new Error("Description and type are required.");
+    if (!description && !type) {
+      throw new Error("You must update at least one field.");
     }
 
     return await this.categoryRepository.updateCategory(description, type, id);

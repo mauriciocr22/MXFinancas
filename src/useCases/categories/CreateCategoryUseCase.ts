@@ -19,6 +19,12 @@ export class CreateCategoryUseCase {
       throw new Error("Description and type are required.");
     }
 
+    if (type !== TransactionType.EXPENSE && type !== TransactionType.INCOME) {
+      throw new Error(
+        "Invalid transaction type. Must be either 'INCOME' or 'EXPENSE'."
+      );
+    }
+
     const category = await this.categoryRepository.createCategory(
       description,
       type

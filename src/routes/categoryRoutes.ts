@@ -8,11 +8,15 @@ export async function categoryRoutes(fastify: FastifyInstance) {
     categoryController.create(request, reply)
   );
 
-  fastify.delete("/categories/:id", (request, reply) =>
-    categoryController.delete(request, reply)
+  fastify.get("/categories/:id", (request, reply) =>
+    categoryController.getById(request, reply)
   );
 
   fastify.put("/categories/:id", (request, reply) =>
     categoryController.update(request, reply)
+  );
+
+  fastify.delete("/categories/:id", (request, reply) =>
+    categoryController.delete(request, reply)
   );
 }

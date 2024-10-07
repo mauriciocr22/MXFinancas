@@ -4,17 +4,22 @@ import { CreateCategoryUseCase } from "../../useCases/categories/CreateCategoryU
 import { TransactionType } from "@prisma/client";
 import { DeleteCategoryUseCase } from "../../useCases/categories/DeleteCategoryUseCase";
 import { UpdateCategoryUseCase } from "../../useCases/categories/UpdateCategoryUseCase";
+import { GetCategoryByIdUseCase } from "../../useCases/categories/GetCategoryByIdUseCase";
 
 export class CategoryController {
   private createCategoryUseCase: CreateCategoryUseCase;
   private deleteCategoryUseCase: DeleteCategoryUseCase;
   private updateCategoryUseCase: UpdateCategoryUseCase;
+  private getCategoryByIdUseCase: GetCategoryByIdUseCase;
 
   constructor() {
     const categoryRepository = new CategoryRepository();
     this.createCategoryUseCase = new CreateCategoryUseCase(categoryRepository);
     this.deleteCategoryUseCase = new DeleteCategoryUseCase(categoryRepository);
     this.updateCategoryUseCase = new UpdateCategoryUseCase(categoryRepository);
+    this.getCategoryByIdUseCase = new GetCategoryByIdUseCase(
+      categoryRepository
+    );
   }
 
   async create(request: FastifyRequest, reply: FastifyReply) {
@@ -23,11 +28,6 @@ export class CategoryController {
         description: string;
         type: TransactionType;
       };
-      if (type !== TransactionType.EXPENSE && type !== TransactionType.INCOME) {
-        throw new Error(
-          "Invalid transaction type. Must be either 'INCOME' or 'EXPENSE'."
-        );
-      }
 
       const category = await this.createCategoryUseCase.execute({
         description,
@@ -41,6 +41,20 @@ export class CategoryController {
       } else {
         reply.status(400).send({ error: "An unexpected error occurred." });
       }
+    }
+  }
+
+  async getById(request: FastifyRequest, reply: FastifyReply) {
+    try {
+      const { id } = request.params as { id: string };
+
+      const category = await this.getCategoryByIdUseCase.execute({ id });
+      reply.status(201).send(category);
+    } catch (error) {
+      reply.status(400).send({
+        error:
+          error instanceof Error ? error.message : "Unknown error occurred",
+      });
     }
   }
 

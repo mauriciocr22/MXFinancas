@@ -8,18 +8,16 @@ export class CategoryRepository implements ICategoryRepository {
     description: string,
     type: TransactionType
   ): Promise<Category> {
-    const category = await prisma.category.create({
+    return prisma.category.create({
       data: {
         description,
         type,
       },
     });
-
-    return category;
   }
 
   async deleteCategory(id: string): Promise<Category> {
-    return await prisma.category.delete({
+    return prisma.category.delete({
       where: { id },
     });
   }
@@ -29,14 +27,18 @@ export class CategoryRepository implements ICategoryRepository {
     type: TransactionType,
     id: string
   ): Promise<Category> {
-    const updatedCategory = await prisma.category.update({
+    return prisma.category.update({
       where: { id },
       data: {
         description,
         type,
       },
     });
+  }
 
-    return updatedCategory;
+  async getCategoryById(id: string): Promise<Category | null> {
+    return prisma.category.findUnique({
+      where: { id },
+    });
   }
 }

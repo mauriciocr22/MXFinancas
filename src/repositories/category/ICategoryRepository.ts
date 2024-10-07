@@ -8,4 +8,5 @@ export interface ICategoryRepository {
     id: string
   ): Promise<Category>;
   deleteCategory(id: string): Promise<Category>;
+  getCategoryById(id: string): Promise<Category | null>;
 }
