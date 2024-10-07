@@ -15,6 +15,10 @@ export class UpdateCategoryUseCase {
   }
 
   async execute({ id, description, type }: UpdateCategoryDTO) {
+    if (!(await this.categoryRepository.getCategoryById(id))) {
+      throw new Error("The category you are trying to update was not found.");
+    }
+
     if (!description && !type) {
       throw new Error("You must update at least one field.");
     }

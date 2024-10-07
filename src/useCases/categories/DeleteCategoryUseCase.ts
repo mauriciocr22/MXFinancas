@@ -12,8 +12,8 @@ export class DeleteCategoryUseCase {
   }
 
   async execute({ id }: DeleteCategoryDTO) {
-    if (!id) {
-      throw new Error("ID is required to delete a category.");
+    if (!(await this.categoryRepository.getCategoryById(id))) {
+      throw new Error("Category not found.");
     }
 
     const deletedCategory = await this.categoryRepository.deleteCategory(id);
