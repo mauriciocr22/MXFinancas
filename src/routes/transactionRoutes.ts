@@ -5,4 +5,5 @@ export async function transactionRoutes(fastify: FastifyInstance) {
   const transactionController = new TransactionController();
 
   fastify.post("/transactions", (request, reply) => transactionController.create(request, reply));
+  fastify.get("/transactions", (request, reply) => transactionController.getAll(request, reply));
 }

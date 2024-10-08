@@ -4,15 +4,18 @@ import { TransactionRepository } from "../../repositories/transaction/Transactio
 import { CreateTransactionUseCase } from "../../useCases/transactions/CreateTransactionUseCase";
 
 import { CreateTransactionDTO } from "../../dtos/transaction/CreateTransactionDTO";
+import { GetAllTransactionsUseCase } from "../../useCases/transactions/GetAllTransactionsUseCase";
 
 export class TransactionController {
   private createTransactionUseCase: CreateTransactionUseCase;
+  private getAllTransactionsUseCase: GetAllTransactionsUseCase;
 
   constructor() {
     const transactionRepository = new TransactionRepository();
     const catetgoryRepository = new CategoryRepository();
 
     this.createTransactionUseCase = new CreateTransactionUseCase(transactionRepository, catetgoryRepository);
+    this.getAllTransactionsUseCase = new GetAllTransactionsUseCase(transactionRepository);
   }
 
   async create(request: FastifyRequest, reply: FastifyReply) {
@@ -22,6 +25,17 @@ export class TransactionController {
       const transaction = await this.createTransactionUseCase.execute({ value, type, description, categoryId });
 
       reply.status(201).send(transaction);
+    } catch (error) {
+      reply.status(400).send({
+        error: error instanceof Error ? error.message : "Unknown error occurred",
+      });
+    }
+  }
+
+  async getAll(request: FastifyRequest, reply: FastifyReply) {
+    try {
+      const transactions = await this.getAllTransactionsUseCase.execute();
+      reply.status(200).send(transactions);
     } catch (error) {
       reply.status(400).send({
         error: error instanceof Error ? error.message : "Unknown error occurred",

@@ -3,4 +3,5 @@ import { CreateTransactionDTO } from "../../dtos/transaction/CreateTransactionDT
 
 export interface ITransactionRepository {
   createTransaction(data: CreateTransactionDTO): Promise<Transaction>;
+  getAllTransactions(): Promise<Transaction[]>;
 }

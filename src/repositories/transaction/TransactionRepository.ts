@@ -16,4 +16,8 @@ export class TransactionRepository implements ITransactionRepository {
       },
     });
   }
+
+  async getAllTransactions(): Promise<Transaction[]> {
+    return prisma.transaction.findMany();
+  }
 }
