@@ -1,11 +1,5 @@
-import { TransactionType } from "@prisma/client";
 import { CategoryRepository } from "../../repositories/category/CategoryRepository";
-
-interface UpdateCategoryDTO {
-  id: string;
-  description: string;
-  type: TransactionType;
-}
+import { UpdateCategoryDTO } from "../../dtos/category/UpdateCategoryDTO";
 
 export class UpdateCategoryUseCase {
   private categoryRepository: CategoryRepository;
@@ -23,6 +17,6 @@ export class UpdateCategoryUseCase {
       throw new Error("You must update at least one field.");
     }
 
-    return await this.categoryRepository.updateCategory(description, type, id);
+    return await this.categoryRepository.updateCategory({ description, type, id });
   }
 }

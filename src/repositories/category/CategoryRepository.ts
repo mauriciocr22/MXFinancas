@@ -1,13 +1,12 @@
-import { Category, TransactionType, PrismaClient } from "@prisma/client";
+import { Category, PrismaClient } from "@prisma/client";
 import { ICategoryRepository } from "./ICategoryRepository";
+import { CreateCategoryDTO } from "../../dtos/category/CreateCategoryDTO";
+import { UpdateCategoryDTO } from "../../dtos/category/UpdateCategoryDTO";
 
 const prisma = new PrismaClient();
 
 export class CategoryRepository implements ICategoryRepository {
-  async createCategory(
-    description: string,
-    type: TransactionType
-  ): Promise<Category> {
+  async createCategory({ description, type }: CreateCategoryDTO): Promise<Category> {
     return prisma.category.create({
       data: {
         description,
@@ -26,11 +25,7 @@ export class CategoryRepository implements ICategoryRepository {
     });
   }
 
-  async updateCategory(
-    description: string,
-    type: TransactionType,
-    id: string
-  ): Promise<Category> {
+  async updateCategory({ description, type, id }: UpdateCategoryDTO): Promise<Category> {
     return prisma.category.update({
       where: { id },
       data: {

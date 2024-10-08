@@ -1,13 +1,11 @@
-import { Category, TransactionType } from "@prisma/client";
+import { Category } from "@prisma/client";
+import { CreateCategoryDTO } from "../../dtos/category/CreateCategoryDTO";
+import { UpdateCategoryDTO } from "../../dtos/category/UpdateCategoryDTO";
 
 export interface ICategoryRepository {
-  createCategory(description: string, type: TransactionType): Promise<Category>;
+  createCategory(data: CreateCategoryDTO): Promise<Category>;
   getAllCategories(): Promise<Category[]>;
   getCategoryById(id: string): Promise<Category | null>;
-  updateCategory(
-    description: string,
-    type: TransactionType,
-    id: string
-  ): Promise<Category>;
+  updateCategory(data: UpdateCategoryDTO): Promise<Category>;
   deleteCategory(id: string): Promise<Category>;
 }

@@ -1,9 +1,5 @@
 import { CategoryRepository } from "../../repositories/category/CategoryRepository";
 
-interface DeleteCategoryDTO {
-  id: string;
-}
-
 export class DeleteCategoryUseCase {
   private categoryRepository: CategoryRepository;
 
@@ -11,7 +7,7 @@ export class DeleteCategoryUseCase {
     this.categoryRepository = categoryRepository;
   }
 
-  async execute({ id }: DeleteCategoryDTO) {
+  async execute(id: string) {
     if (!(await this.categoryRepository.getCategoryById(id))) {
       throw new Error("Category not found.");
     }

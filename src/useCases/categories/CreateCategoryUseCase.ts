@@ -1,11 +1,6 @@
 import { TransactionType } from "@prisma/client";
 import { CategoryRepository } from "../../repositories/category/CategoryRepository";
-
-// Data Transfer Object
-interface CreateCategoryDTO {
-  description: string;
-  type: TransactionType;
-}
+import { CreateCategoryDTO } from "../../dtos/category/CreateCategoryDTO";
 
 export class CreateCategoryUseCase {
   private categoryRepository: CategoryRepository;
@@ -20,15 +15,9 @@ export class CreateCategoryUseCase {
     }
 
     if (type !== TransactionType.EXPENSE && type !== TransactionType.INCOME) {
-      throw new Error(
-        "Invalid transaction type. Must be either 'INCOME' or 'EXPENSE'."
-      );
+      throw new Error("Invalid transaction type. Must be either 'INCOME' or 'EXPENSE'.");
     }
 
-    const category = await this.categoryRepository.createCategory(
-      description,
-      type
-    );
-    return category;
+    return await this.categoryRepository.createCategory({ description, type });
   }
 }
