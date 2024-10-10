@@ -61,7 +61,7 @@ export class CategoryController {
     try {
       const { id } = request.params as { id: string };
 
-      const category = await this.getCategoryByIdUseCase.execute({ id });
+      const category = await this.getCategoryByIdUseCase.execute(id);
       reply.status(200).send(category);
     } catch (error) {
       reply.status(400).send({

@@ -1,4 +1,4 @@
-import { PrismaClient, Transaction, TransactionType } from "@prisma/client";
+import { PrismaClient, Transaction } from "@prisma/client";
 import { ITransactionRepository } from "./ITransactionRepository";
 
 import { CreateTransactionDTO } from "../../dtos/transaction/CreateTransactionDTO";
@@ -19,5 +19,11 @@ export class TransactionRepository implements ITransactionRepository {
 
   async getAllTransactions(): Promise<Transaction[]> {
     return prisma.transaction.findMany();
+  }
+
+  async getTransactionById(id: string): Promise<Transaction | null> {
+    return prisma.transaction.findUnique({
+      where: { id },
+    });
   }
 }

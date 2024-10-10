@@ -1,9 +1,5 @@
 import { CategoryRepository } from "../../repositories/category/CategoryRepository";
 
-interface GetCategoryByIdDTO {
-  id: string;
-}
-
 export class GetCategoryByIdUseCase {
   private categoryRepository: CategoryRepository;
 
@@ -11,7 +7,7 @@ export class GetCategoryByIdUseCase {
     this.categoryRepository = categoryRepository;
   }
 
-  async execute({ id }: GetCategoryByIdDTO) {
+  async execute(id: string) {
     if (!id) {
       throw new Error("Please inform an ID.");
     }
