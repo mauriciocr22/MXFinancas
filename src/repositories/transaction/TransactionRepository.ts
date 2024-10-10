@@ -41,4 +41,10 @@ export class TransactionRepository implements ITransactionRepository {
       },
     });
   }
+
+  async deleteTransaction(id: string): Promise<Transaction> {
+    return prisma.transaction.delete({
+      where: { id },
+    });
+  }
 }

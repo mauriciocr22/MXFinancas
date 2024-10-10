@@ -8,4 +8,5 @@ export async function transactionRoutes(fastify: FastifyInstance) {
   fastify.get("/transactions", (request, reply) => transactionController.getAll(request, reply));
   fastify.get("/transactions/:id", (request, reply) => transactionController.getById(request, reply));
   fastify.put("/transactions/:id", (request, reply) => transactionController.update(request, reply));
+  fastify.delete("/transactions/:id", (request, reply) => transactionController.delete(request, reply));
 }
